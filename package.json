@@ -1,0 +1,22 @@
+{
+  "name": "foodtrack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Simon LE STER",
+  "license": "ISC",
+  "dependencies": {
+    "biguint-format": "^1.0.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "flake-idgen": "^1.1.0",
+    "hashids": "^1.1.1",
+    "level": "^1.7.0",
+    "leveldown": "^1.7.2",
+    "levelup": "^1.3.9",
+    "uuid": "^3.1.0"
+  }
+}

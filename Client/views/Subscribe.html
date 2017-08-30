@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscribe</title>
+</head>
+<body>
+
+email address: <input id="emailInput">
+<br>
+password: <input id="pwdInput">
+<br>
+Confirm password: <input id="confirmPwdInput">
+<br>
+<button onclick="SendSubscription()">Send</button>
+<br>
+<p id="answerBox">
+</p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    var SendSubscription = function () {
+        var email = document.getElementById("emailInput").value;
+        var password = document.getElementById("pwdInput").value;
+        var pwdConfirm = document.getElementById("confirmPwdInput").value;
+
+        if(password !== pwdConfirm)
+        {
+            window.alert("Password must match");
+            return;
+        }
+
+        var data = {
+            login: email,
+            password: password
+        };
+
+        var jsonData = JSON.stringify(data);
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/v1/users/subscribe",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result) {
+                document.getElementById("answerBox").innerHTML = result;
+            },
+            error: function (xhr, status, error) {
+                var e = error;
+            },
+            data: jsonData
+        });
+    }
+</script>
+</body>
+</html>

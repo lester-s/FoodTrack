@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authenticate</title>
+</head>
+<body>
+
+email address: <input id="emailInput">
+<br>
+password: <input id="pwdInput">
+<br>
+<button onclick="SendAuth()">Send</button>
+<br>
+<p id="answerBox">
+</p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+    var deleteCookie = function  ( cookie_name )
+    {
+        var cookie_date = new Date ( );  // current date & time
+        cookie_date.setTime ( cookie_date.getTime() - 1 );
+        document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
+    }
+
+    var SendAuth = function () {
+        var email = document.getElementById("emailInput").value;
+        var password = document.getElementById("pwdInput").value;
+
+        var data = {
+            login: email,
+            password: password
+        };
+
+        var jsonData = JSON.stringify(data);
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/v1/users/authenticate",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result) {
+                document.getElementById("answerBox").innerHTML = result.token;
+                deleteCookie("FoodTrackToken");
+                document.cookie = "FoodTrackToken="+result.token;
+            },
+            error: function (xhr, status, error) {
+                var e = error;
+            },
+            data: jsonData
+        });
+    }
+</script>
+</body>
+</html>
