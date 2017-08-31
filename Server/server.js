@@ -31,8 +31,8 @@ router.get("/subscribe", function (req, res) {
     res.sendFile('/Subscribe.html');
 });
 
-router.get("/truck/:id", function (req, res) {
-    res.sendFile(pathBuilder.join(__dirname, '../Client', 'views', 'truck.html'));
+router.get("/truck*", function (req, res) {
+    res.sendFile('truck.html');
 });
 
 router.get("/v1/trucks", function (req, res) {

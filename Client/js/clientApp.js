@@ -1,6 +1,11 @@
 const cookieName = "FoodTrackToken";
 var clientApp = new Vue({
     el: '#app',
+    mounted: function () {
+        this.$nextTick(function () {
+            clientApp.GetAllTrucks();
+        })
+    },
     data: {
         truckId: '',
         nameInput: '',
@@ -13,7 +18,7 @@ var clientApp = new Vue({
     methods: {
         Redirect: function (item) {
           var t = item;
-          window.location.href = "http://localhost:3000/truck/"+item.id;
+          window.location.href = "http://localhost:3000/truck.html#"+item.id;
         },
         GetAllTrucks: function (event) {
             if (markersLayers.length > 0) {
@@ -40,7 +45,7 @@ var clientApp = new Vue({
                         innerText += "<br>" + JSON.stringify(truck);
 
                         var layer = L.marker([truck.location.latitude, truck.location.longitude])
-                            .bindPopup('<a href="' + truck.url + '" target="_blank">' + truck.name + '</a>')
+                            .bindPopup('<a href="' + "http://localhost:3000/truck.html#"+ truck.id + '" target="_blank">' + truck.name + '</a>')
                             .addTo(mymap);
 
                         markersLayers.push(layer);
