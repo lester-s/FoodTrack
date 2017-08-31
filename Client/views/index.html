@@ -34,6 +34,11 @@
     <button @click="createTruckSubmit" type="button">Create/update</button>
     <br>
     <br>
+    <ul>
+        <li v-for="item in trucks">
+            <a @click="Redirect(item)">{{ item.name}}</a>
+        </li>
+    </ul>
     <div id="mapid" style="height: 1080px" @contextmenu="SelectOneLocationOnMap"></div>
 
     <p id="answerBox">

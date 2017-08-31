@@ -1,7 +1,4 @@
-var customComponent = Vue.component('my-component', {
-    template: '<div>A custom component!</div>'
-});
-
+const cookieName = "FoodTrackToken";
 var clientApp = new Vue({
     el: '#app',
     data: {
@@ -10,9 +7,14 @@ var clientApp = new Vue({
         urlInput: '',
         latitudeInput: '',
         longitudeInput: '',
-        isNewInput: true
+        isNewInput: true,
+        trucks:[]
     },
     methods: {
+        Redirect: function (item) {
+          var t = item;
+          window.location.href = "http://localhost:3000/truck/"+item.id;
+        },
         GetAllTrucks: function (event) {
             if (markersLayers.length > 0) {
                 markersLayers.forEach(function (t) {
@@ -21,9 +23,9 @@ var clientApp = new Vue({
             }
             var encodeAddress = encodeURI("Laval 53000 france");
             var requestGeocoding = " http://nominatim.openstreetmap.org/search?format=json&q=" + encodeAddress;
-            $.getJSON(requestGeocoding, function (data) {
-                var t = data;
-            });
+            // $.getJSON(requestGeocoding, function (data) {
+            //     var t = data;
+            // });
 
             $.ajax({
                 type: "GET",
@@ -31,6 +33,8 @@ var clientApp = new Vue({
                 dataType: "json",
                 success: function (result) {
                     var innerText = "";
+
+                    clientApp.trucks = result;
 
                     result.forEach(function (truck) {
                         innerText += "<br>" + JSON.stringify(truck);
@@ -57,7 +61,7 @@ var clientApp = new Vue({
                 id = clientApp.truckId;
             }
 
-            var token = getCookie("FoodTrackToken");
+            var token = getCookie(cookieName);
 
             var data = {
                 token: token,
