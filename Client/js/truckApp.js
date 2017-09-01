@@ -6,7 +6,6 @@ var truckApp = new Vue({
         this.$nextTick(function () {
             var urlPath = window.location.hash.split('#');
             truckApp.truckId = urlPath[1];
-
             truckApp.GetOneTruck()
         })
     },
@@ -25,6 +24,11 @@ var truckApp = new Vue({
                 url: "http://localhost:3000/v1/trucks/" + truckApp.truckId,
                 dataType: "json",
                 success: function (result) {
+                    if(result.errorCode)
+                    {
+                        alert(result.errorCode + ", " + result.errorMessage);
+                        return;
+                    }
                     truckApp.nameInput = result.name;
                     truckApp.urlInput = result.url;
                     truckApp.latitudeInput = result.location.latitude;
@@ -62,6 +66,11 @@ var truckApp = new Vue({
                 dataType: "json",
                 contentType: "application/json",
                 success: function (result) {
+                    if(result.errorCode)
+                    {
+                        alert(result.errorCode + ", " + result.errorMessage);
+                        return;
+                    }
                     truckMarker.remove();
                     truckMarker = L.marker([truckApp.latitudeInput, truckApp.longitudeInput])
                         .bindPopup('<a href="' + result.url + '" target="_blank">' + result.name + '</a>')

@@ -4,7 +4,7 @@ var userDB = new userDBHolder.userDB();
 var helperHolder = require('./Helpers');
 var helpers = new helperHolder.helpers();
 var Sessions = {
-    isRunning:true
+    isRunning: true
 };
 var userbll = function UserBLL() {
 
@@ -16,13 +16,21 @@ var userbll = function UserBLL() {
                 return;
             }
 
-            userDB.CreateUser(login, password).then(function (createSuccess) {
-                resolve(login);
+            userDB.GetUser(login).then(function (getSuccess) {
+                var exception = new  ftException.ftException("UserAlreadyExist", "This user name is already in use.", "UserBll, create user");
+                reject(exception);
                 return;
-            }, function (createFail) {
-                reject(createFail);
-                return;
+            }, function (GetFail) {
+                userDB.CreateUser(login, password).then(function (createSuccess) {
+                    resolve(login);
+                    return;
+                }, function (createFail) {
+                    reject(createFail);
+                    return;
+                });
             });
+
+
         });
     };
 
@@ -47,7 +55,7 @@ var userbll = function UserBLL() {
 
                 Sessions[sessionId.toString()] = {
                     login: login,
-                    endDate: new Date(currentTime.getTime() + 10 * 60000),
+                    endDate: new Date(currentTime.getTime() + 1 * 60000),
                 };
 
                 var userFriendlyToken = helpers.EncodeSnowflakeToToken(sessionId);
@@ -76,15 +84,17 @@ var userbll = function UserBLL() {
 
                 var isValid = currentSession.endDate > new Date();
 
-                if(isValid)
-                {
+                if (isValid) {
                     currentSession.endDate = new Date(currentSession.endDate.getTime() + 2 * 60000);
-                    resolve(true);
+                    resolve({
+                        isValid: true,
+                        login: currentSession.login
+                    });
                     return;
                 }
-                else
-                {
+                else {
                     var exception = new ftException.ftException("InvalidToken", "The token used for the session has expired.", "UserBll, ValidateToken");
+                    delete Sessions[sessionId.toString()];
                     reject(exception);
                     return;
                 }

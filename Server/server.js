@@ -48,10 +48,10 @@ router.get("/v1/trucks", function (req, res) {
 router.get("/v1/trucks/:id", function (req, res) {
     console.log("enter the get");
     var idToFetch = req.params.id;
+    var token = req.params.token;
     foodBll.GetTruckById(idToFetch).then(function (trucks) {
         var jsonResult = JSON.stringify(trucks);
         res.send(jsonResult);
-
     }, function (error) {
         res.send(error.ToJson());
     });
@@ -68,8 +68,9 @@ router.post('/v1/trucks', jsonParser, function (req, res) {
     }
 
     userBll.ValidateToken(data.token).then(function (validateSuccess) {
-        if(validateSuccess === true)
+        if(validateSuccess.isValid === true)
         {
+            data.login = validateSuccess.login;
             if (data.isNew) {
                 foodBll.CreateTruck(data).then(function (successResult) {
                     var responseData = {
@@ -91,7 +92,7 @@ router.post('/v1/trucks', jsonParser, function (req, res) {
                     res.send(jsonData);
 
                 }, function (errorResult) {
-                    res.send(error.ToJson());
+                    res.send(errorResult.ToJson());
                 });
             }
         }
@@ -106,7 +107,8 @@ router.post('/v1/trucks', jsonParser, function (req, res) {
 router.post('/v1/users/subscribe', jsonParser, function (req, res) {
     var subscribtionData = req.body;
     userBll.CreateUser(subscribtionData.login, subscribtionData.password).then(function (createSuccess) {
-        res.send(createSuccess);
+        var jsonData = JSON.stringify(createSuccess);
+        res.send(jsonData);
     }, function (createFail) {
         res.send(createFail.ToJson());
     });

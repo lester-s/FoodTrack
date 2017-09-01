@@ -37,6 +37,13 @@ var clientApp = new Vue({
                 url: "http://localhost:3000/v1/trucks",
                 dataType: "json",
                 success: function (result) {
+
+                    if(result.errorCode)
+                    {
+                        alert(result.errorCode + ", " + result.errorMessage);
+                        return;
+                    }
+
                     var innerText = "";
 
                     clientApp.trucks = result;
@@ -50,9 +57,6 @@ var clientApp = new Vue({
 
                         markersLayers.push(layer);
                     });
-
-
-                    document.getElementById("answerBox").innerHTML = innerText;
                 },
                 error: function (xhr, status, error) {
                     var e = error;
@@ -86,7 +90,13 @@ var clientApp = new Vue({
                 dataType: "json",
                 contentType: "application/json",
                 success: function (result) {
-                    document.getElementById("answerBox").innerHTML = result.truckId;
+                    if(result.errorCode)
+                    {
+                        alert(result.errorCode + ", " + result.errorMessage);
+                        return;
+                    }
+
+                    clientApp.GetAllTrucks();
                 },
                 error: function (xhr, status, error) {
                     var e = error;
@@ -100,7 +110,11 @@ var clientApp = new Vue({
                 url: "http://localhost:3000/v1/trucks/" + clientApp.truckId,
                 dataType: "json",
                 success: function (result) {
-                    document.getElementById("answerBox").innerHTML = JSON.stringify(result);
+                    if(result.errorCode)
+                    {
+                        alert(result.errorCode + ", " + result.errorMessage);
+                        return;
+                    }
                 },
                 error: function (xhr, status, error) {
                     var e = error;
