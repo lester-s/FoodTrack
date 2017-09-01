@@ -177,6 +177,29 @@ function CreateContextMenu() {
     return contextMenu;
 };
 
+var customControl =  L.Control.extend({
+
+    options: {
+        position: 'topleft'
+    },
+
+    onAdd: function (map) {
+        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+
+        container.style.backgroundColor = 'white';
+        container.style.backgroundImage = "url(https://cdn0.iconfinder.com/data/icons/faticons-2/29/refresh27-48.png";
+        container.style.backgroundSize = "28px 28px";
+        container.style.width = '32px';
+        container.style.height = '32px';
+
+        container.onclick = function(){
+            clientApp.GetAllTrucks();
+        }
+
+        return container;
+    }
+});
+
 
 var mymap = L.map('mapid').setView([51.505, -0.09], 3);
 
@@ -193,5 +216,7 @@ mymap.on('contextmenu', function (ev) {
         .setContent(CreateContextMenu())
         .openOn(mymap);
 });
+
+mymap.addControl(new customControl());
 
 var markersLayers = [];
